@@ -1,0 +1,17 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Collision : MonoBehaviour
+{
+    private int health = 100; // Health
+    public Text healthText;   // Health displayed on screen
+
+    // Collision detection. collisionInfo can be used in if statement for checking collision with specific objects using "tags".
+    // e.g. if (collisionInfo.GetComponent<Collider2D>().tag == "Object") { //do something }
+
+    void OnCollisionEnter2D(Collider2D collisionInfo)// On collision with an object
+    {
+        health -= 10;                        // Take 10 health on collision
+        healthText.text = health.ToString(); // Display health on screen
+    }
+}
