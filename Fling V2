@@ -1,0 +1,55 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Fling : MonoBehaviour
+{
+
+    public Rigidbody2D rb;
+
+    private float releaseTime = 0.1f;
+
+    private Vector3 dragStart;
+    private Vector3 dragEnd;
+    private Vector3 direction;
+    private float distance;
+
+    private bool isThrown = false;
+
+    void Update()
+    {
+        if (isThrown)
+        {
+            transform.Translate(direction * distance * 50 * Time.deltaTime); // Changed from force to translate
+                                                                             // Using distance (mouse travel) as speed multiplier
+        }
+    }
+
+    void OnMouseDown()
+    {
+        rb.isKinematic = true;
+        dragStart = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        StartCoroutine(Release());
+    }
+
+    void OnMouseUp()
+    {
+        if (!isThrown)
+        {
+            rb.isKinematic = false;
+            isThrown = true;
+            dragEnd = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            direction = dragEnd - dragStart;
+            distance = direction.magnitude;
+            direction.Normalize();
+        }
+    }
+
+    IEnumerator Release()
+    {
+        yield return new WaitForSeconds(releaseTime);
+        OnMouseUp();
+    }
+
+}
